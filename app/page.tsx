@@ -40,6 +40,13 @@ export default function Page() {
             Log In
           </Link>
         </div>
+        <div className="text-stone-400 mb-4">Already logged in?</div>
+        <Link
+          href="/dashboard"
+          className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded transition-colors duration-200 mb-8"
+        >
+          Dashboard
+        </Link>
         <div className="flex space-x-3">
           <Link
             href="/about"

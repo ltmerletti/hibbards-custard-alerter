@@ -1,5 +1,5 @@
 import { drizzle } from "drizzle-orm/postgres-js";
-import { pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import { pgTable, serial, varchar, text } from "drizzle-orm/pg-core";
 import { eq } from "drizzle-orm";
 import postgres from "postgres";
 import { genSaltSync, hashSync } from "bcrypt-ts";
@@ -20,55 +20,12 @@ export async function createUser(email: string, password: string) {
   let salt = genSaltSync(10);
   let hash = hashSync(password, salt);
 
-  return await db.insert(users).values({ email, password: hash });
-}
-
-export async function loadWhitelist(email: string): Promise<string[]> {
-  const users = await ensureTableExists();
-  const user = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, email))
-    .limit(1);
-  if (user.length > 0 && user[0].whiteList) {
-    return user[0].whiteList;
-  }
-  return [];
-}
-
-export async function loadBlacklist(email: string): Promise<string[]> {
-  const users = await ensureTableExists();
-  const user = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, email))
-    .limit(1);
-  if (user.length > 0 && user[0].blackList) {
-    return user[0].blackList;
-  }
-  return [];
-}
-
-export async function setWhitelist(
-  email: string,
-  whitelist: string[]
-): Promise<void> {
-  const users = await ensureTableExists();
-  await db
-    .update(users)
-    .set({ whiteList: whitelist })
-    .where(eq(users.email, email));
-}
-
-export async function setBlacklist(
-  email: string,
-  blacklist: string[]
-): Promise<void> {
-  const users = await ensureTableExists();
-  await db
-    .update(users)
-    .set({ blackList: blacklist })
-    .where(eq(users.email, email));
+  return await db.insert(users).values({ 
+    email, 
+    password: hash,
+    whitelist: [],
+    blacklist: []
+  });
 }
 
 async function ensureTableExists() {
@@ -84,18 +41,66 @@ async function ensureTableExists() {
       CREATE TABLE "User" (
         id SERIAL PRIMARY KEY,
         email VARCHAR(64),
-        password VARCHAR(64)
+        password VARCHAR(64),
+        whitelist TEXT[],
+        blacklist TEXT[],
+        customInstructions TEXT
       );`;
   }
 
-  // sourcery skip: inline-immediately-returned-variable
   const table = pgTable("User", {
     id: serial("id").primaryKey(),
     email: varchar("email", { length: 64 }),
     password: varchar("password", { length: 64 }),
-    whiteList: varchar("whiteList", { length: 255 }).array(),
-    blackList: varchar("blackList", { length: 255 }).array(),
+    whitelist: text("whitelist").array(),
+    blacklist: text("blacklist").array(),
+    customInstructions: text("customInstructions")
   });
 
   return table;
+}
+
+export async function getWhitelist(email: string) {
+  const users = await ensureTableExists();
+  const result = await db.select({ whitelist: users.whitelist })
+    .from(users)
+    .where(eq(users.email, email));
+  return result[0]?.whitelist || [];
+}
+
+export async function setWhitelist(email: string, whitelist: string[]) {
+  const users = await ensureTableExists();
+  await db.update(users)
+    .set({ whitelist })
+    .where(eq(users.email, email));
+}
+
+export async function getBlacklist(email: string) {
+  const users = await ensureTableExists();
+  const result = await db.select({ blacklist: users.blacklist })
+    .from(users)
+    .where(eq(users.email, email));
+  return result[0]?.blacklist || [];
+}
+
+export async function setBlacklist(email: string, blacklist: string[]) {
+  const users = await ensureTableExists();
+  await db.update(users)
+    .set({ blacklist })
+    .where(eq(users.email, email));
+}
+
+export async function getCustomInstructions(email: string) {
+  const users = await ensureTableExists();
+  const result = await db.select({ customInstructions: users.customInstructions })
+    .from(users)
+    .where(eq(users.email, email));
+  return result[0]?.customInstructions || '';
+}
+
+export async function setCustomInstructions(email: string, customInstructions: string) {
+  const users = await ensureTableExists();
+  await db.update(users)
+    .set({ customInstructions })
+    .where(eq(users.email, email));
 }
