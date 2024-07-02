@@ -23,6 +23,9 @@ importers:
       drizzle-orm:
         specifier: ^0.29.2
         version: 0.29.2(@types/react@18.2.45)(expo-sqlite@13.2.0(expo@49.0.21(@babel/core@7.23.6)))(postgres@3.4.3)(react@18.2.0)
+      fs:
+        specifier: 0.0.1-security
+        version: 0.0.1-security
       geist:
         specifier: ^1.2.0
         version: 1.2.0(next@14.0.4(@babel/core@7.23.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))
@@ -44,6 +47,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      tls:
+        specifier: ^0.0.1
+        version: 0.0.1
     devDependencies:
       autoprefixer:
         specifier: ^10.4.16
@@ -2156,6 +2162,9 @@ packages:
   fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
 
+  fs@0.0.1-security:
+    resolution: {integrity: sha512-3XY9e1pP0CVEUCdj5BmfIZxRBTSDycnbqhIOGec9QYtmVH2fbLpj86CFWkrNOkt/Fvty4KZG5lTglL9j/gJ87w==}
+
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
@@ -3752,6 +3761,9 @@ packages:
 
   tiny-queue@0.2.1:
     resolution: {integrity: sha512-EijGsv7kzd9I9g0ByCl6h42BWNGUZrlCSejfrb3AKeHC33SGbASu1VDf5O3rRiiUOhAC9CHdZxFPbZu0HmR70A==}
+
+  tls@0.0.1:
+    resolution: {integrity: sha512-GzHpG+hwupY8VMR6rYsnAhTHqT/97zT45PG8WD5eTT1lq+dFE0nN+1PYpsoBcHJgSmTz5ceK2Cv88IkPmIPOtQ==}
 
   tmp@0.0.33:
     resolution: {integrity: sha512-jRCJlojKnZ3addtTOjdIqoRuPEKBvNXcGYqzO6zWZX8KfKEpnGY5jfggJQ3EjKuu8D4bJRr0y+cYJFmYbImXGw==}
@@ -6824,6 +6836,8 @@ snapshots:
 
   fs.realpath@1.0.0: {}
 
+  fs@0.0.1-security: {}
+
   fsevents@2.3.3:
     optional: true
 
@@ -8451,6 +8465,8 @@ snapshots:
   through@2.3.8: {}
 
   tiny-queue@0.2.1: {}
+
+  tls@0.0.1: {}
 
   tmp@0.0.33:
     dependencies:
