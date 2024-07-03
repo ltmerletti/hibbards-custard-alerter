@@ -1,0 +1,7 @@
+Today's date is ${currentDate}.
+Given the following JSON data, extract the daily flavors mentioned in the most recent post's caption.
+Respond only with a JSON object containing a single key "flavors" with an array of flavor strings.
+Ensure that if there are no flavors mentioned matching today's date that you return an empty array.
+Do not include any Markdown formatting in your response.
+
+JSON data:

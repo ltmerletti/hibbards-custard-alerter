@@ -1,4 +1,4 @@
-import { auth, signOut } from 'app/auth';
+import { auth, signOut } from "app/auth";
 
 export default async function ProtectedPage() {
   let session = await auth();
@@ -15,13 +15,15 @@ export default async function ProtectedPage() {
 
 function SignOut() {
   return (
-    <form
-      action={async () => {
-        'use server';
-        await signOut();
-      }}
-    >
-      <button type="submit">Sign out</button>
-    </form>
+    <>
+      <form
+        action={async () => {
+          "use server";
+          await signOut();
+        }}
+      >
+        <button type="submit">Sign out</button>
+      </form>
+    </>
   );
 }

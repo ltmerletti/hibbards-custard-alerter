@@ -15,6 +15,11 @@ export async function getUser(email: string) {
   return await db.select().from(users).where(eq(users.email, email));
 }
 
+export async function getAllUsers() {
+  const users = await ensureTableExists();
+  return await db.select().from(users);
+}
+
 export async function createUser(email: string, password: string) {
   const users = await ensureTableExists();
   let salt = genSaltSync(10);
