@@ -1,14 +1,14 @@
 //app/api/core_service/ro
 
 import { NextRequest, NextResponse } from "next/server";
-import { sendFlavorEmail } from "../core_service/email/route";
+import { sendFlavorEmail } from "../core_service/email/send_email";
 import { getUserEmailAddressById } from "../../db";
-import { generateJsonDataStringWithUsersAndFlavors } from "./make_jsonData_string_with_users_and_flavors/route";
+import { generateJsonDataStringWithUsersAndFlavors } from "./make_jsonData_string_with_users_and_flavors/generateJsonDataStringWithUsersAndFlavors";
 import {
   processFlavorPreferences,
   Recommendation,
   InputData,
-} from "./ai_get_recommended_users/route";
+} from "./ai_get_recommended_users/get_recommended_users";
 
 export async function POST(request: NextRequest) {
   try {

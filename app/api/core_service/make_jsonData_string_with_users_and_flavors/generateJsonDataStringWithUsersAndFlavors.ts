@@ -7,8 +7,8 @@ import {
   getCustomInstructions,
 } from "../../../db";
 
-import { fetchInstagramData, ParsedData } from "../../instagram/route";
-import { extractFlavors } from "../ai_todays_flavor/route";
+import { fetchInstagramData, ParsedData } from "../../instagram/get_instagram_data";
+import { extractFlavors } from "../ai_todays_flavor/extract_flavors";
 
 interface InstagramPost {
   created_at: string;
