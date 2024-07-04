@@ -9,6 +9,7 @@
 ## How it Works
 
 Tired of missing out on your favorite Hibbard's Custard flavors? Only want to be tempted when there's a flavor you're interested in? Our app keeps tabs on Hibbard's Instagram page, ensuring you're the first to know when a flavor you might be interested in is available.
+
 ![Flowchart](Hibbards_Custard_Notifier_Flowchart.png)
 
 ## What Data is Stored and Collected?
