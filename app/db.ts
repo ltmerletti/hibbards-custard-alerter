@@ -20,16 +20,24 @@ export async function getAllUsers() {
   return await db.select().from(users);
 }
 
+export async function getUserEmailAddressById(id: number) {
+  const users = await ensureTableExists();
+  return await db
+    .select({ email: users.email })
+    .from(users)
+    .where(eq(users.id, id));
+}
+
 export async function createUser(email: string, password: string) {
   const users = await ensureTableExists();
   let salt = genSaltSync(10);
   let hash = hashSync(password, salt);
 
-  return await db.insert(users).values({ 
-    email, 
+  return await db.insert(users).values({
+    email,
     password: hash,
     whitelist: [],
-    blacklist: []
+    blacklist: [],
   });
 }
 
@@ -59,7 +67,7 @@ async function ensureTableExists() {
     password: varchar("password", { length: 64 }),
     whitelist: text("whitelist").array(),
     blacklist: text("blacklist").array(),
-    customInstructions: text("customInstructions")
+    customInstructions: text("customInstructions"),
   });
 
   return table;
@@ -67,7 +75,8 @@ async function ensureTableExists() {
 
 export async function getWhitelist(email: string) {
   const users = await ensureTableExists();
-  const result = await db.select({ whitelist: users.whitelist })
+  const result = await db
+    .select({ whitelist: users.whitelist })
     .from(users)
     .where(eq(users.email, email));
   return result[0]?.whitelist || [];
@@ -75,14 +84,13 @@ export async function getWhitelist(email: string) {
 
 export async function setWhitelist(email: string, whitelist: string[]) {
   const users = await ensureTableExists();
-  await db.update(users)
-    .set({ whitelist })
-    .where(eq(users.email, email));
+  await db.update(users).set({ whitelist }).where(eq(users.email, email));
 }
 
 export async function getBlacklist(email: string) {
   const users = await ensureTableExists();
-  const result = await db.select({ blacklist: users.blacklist })
+  const result = await db
+    .select({ blacklist: users.blacklist })
     .from(users)
     .where(eq(users.email, email));
   return result[0]?.blacklist || [];
@@ -90,22 +98,25 @@ export async function getBlacklist(email: string) {
 
 export async function setBlacklist(email: string, blacklist: string[]) {
   const users = await ensureTableExists();
-  await db.update(users)
-    .set({ blacklist })
-    .where(eq(users.email, email));
+  await db.update(users).set({ blacklist }).where(eq(users.email, email));
 }
 
 export async function getCustomInstructions(email: string) {
   const users = await ensureTableExists();
-  const result = await db.select({ customInstructions: users.customInstructions })
+  const result = await db
+    .select({ customInstructions: users.customInstructions })
     .from(users)
     .where(eq(users.email, email));
-  return result[0]?.customInstructions || '';
+  return result[0]?.customInstructions || "";
 }
 
-export async function setCustomInstructions(email: string, customInstructions: string) {
+export async function setCustomInstructions(
+  email: string,
+  customInstructions: string
+) {
   const users = await ensureTableExists();
-  await db.update(users)
+  await db
+    .update(users)
     .set({ customInstructions })
     .where(eq(users.email, email));
 }

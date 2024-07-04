@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 export default function Page() {
   return (
@@ -23,7 +23,9 @@ export default function Page() {
             Welcome to Hibbard&apos;s Frozen Custard Tracker
           </h1>
           <p className="text-stone-400 mt-5">
-            Indulge in the sweetness of life! Track your favorite flavors, get notified about new arrivals, and never miss a scoop with our email updates.
+            Indulge in the sweetness of life! Track your favorite flavors, get
+            notified about new arrivals, and never miss a scoop with our email
+            updates.
           </p>
         </div>
         <div className="flex space-x-4 mb-8">

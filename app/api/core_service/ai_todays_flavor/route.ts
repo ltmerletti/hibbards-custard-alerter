@@ -3,14 +3,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(
-  process.env.GEMINI_API_KEY ?? ""
-);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
 
 async function extractFlavors(jsonData: any): Promise<string> {
   const model = genAI.getGenerativeModel({
     model: "gemini-1.5-flash",
-    generationConfig: { responseMimeType: "application/json" }
+    generationConfig: { responseMimeType: "application/json" },
   });
 
   let currentDate = new Date().toISOString().split("T")[0];
@@ -32,19 +30,31 @@ ${JSON.stringify(jsonData, null, 2)}
   return result.response.text();
 }
 
+let parsedFlavors: string[] | null;
+
 export async function POST(request: NextRequest) {
   try {
     let jsonData = await request.json();
     let flavorsJson = await extractFlavors(jsonData);
-    
+
     // Parse the JSON string and stringify it again to ensure valid JSON
-    let parsedFlavors = JSON.parse(flavorsJson);
+    parsedFlavors = JSON.parse(flavorsJson);
     return NextResponse.json(parsedFlavors);
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json(
-      { error: "An error occurred while processing the request.", details: (error as Error).message },
+      {
+        error: "An error occurred while processing the request.",
+        details: (error as Error).message,
+      },
       { status: 500 }
     );
   }
+}
+export async function GET(request: NextRequest) {
+  return NextResponse.json(parsedFlavors);
+}
+
+export async function getFlavors() {
+  return parsedFlavors;
 }

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, KeyboardEvent } from 'react';
-import { PencilIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { useState, KeyboardEvent } from "react";
+import { PencilIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 interface TagListProps {
   title: string;
@@ -11,10 +11,16 @@ interface TagListProps {
   className?: string;
 }
 
-export default function TagList({ title, tags, email, updateTags, className }: TagListProps) {
+export default function TagList({
+  title,
+  tags,
+  email,
+  updateTags,
+  className,
+}: TagListProps) {
   const [localTags, setLocalTags] = useState(tags);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [newTag, setNewTag] = useState('');
+  const [newTag, setNewTag] = useState("");
 
   const handleDelete = async (index: number) => {
     const updatedTags = localTags.filter((_, i) => i !== index);
@@ -36,13 +42,16 @@ export default function TagList({ title, tags, email, updateTags, className }: T
     if (newTag.trim()) {
       const updatedTags = [...localTags, newTag.trim()];
       setLocalTags(updatedTags);
-      setNewTag('');
+      setNewTag("");
       await updateTags(email, updatedTags);
     }
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, index?: number) => {
-    if (e.key === 'Enter') {
+  const handleKeyDown = (
+    e: KeyboardEvent<HTMLInputElement>,
+    index?: number
+  ) => {
+    if (e.key === "Enter") {
       if (index !== undefined) {
         handleEdit(index, (e.target as HTMLInputElement).value);
       } else {
@@ -75,14 +84,14 @@ export default function TagList({ title, tags, email, updateTags, className }: T
               <>
                 <span className="flex-grow">{tag}</span>
                 <div className="flex items-center space-x-1">
-                  <button 
-                    onClick={() => setEditingIndex(index)} 
+                  <button
+                    onClick={() => setEditingIndex(index)}
                     className="text-gray-400 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <PencilIcon className="h-4 w-4" />
                   </button>
-                  <button 
-                    onClick={() => handleDelete(index)} 
+                  <button
+                    onClick={() => handleDelete(index)}
                     className="text-gray-400 hover:text-white"
                   >
                     <XMarkIcon className="h-4 w-4" />
@@ -102,7 +111,10 @@ export default function TagList({ title, tags, email, updateTags, className }: T
           placeholder="Add new tag"
           className="bg-gray-800 text-white px-2 py-1 rounded flex-grow"
         />
-        <button onClick={handleAdd} className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded transition-colors duration-200">
+        <button
+          onClick={handleAdd}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded transition-colors duration-200"
+        >
           <PlusIcon className="h-4 w-4" />
         </button>
       </div>

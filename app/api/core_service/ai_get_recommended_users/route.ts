@@ -1,22 +1,34 @@
-import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import {
-  getAllUsers,
-  getWhitelist,
-  getBlacklist,
-  getCustomInstructions,
-} from "../../../db";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
 
-async function processFlavorPreferences(jsonData: any): Promise<string> {
+export interface User {
+  id: string;
+  whitelist: string[];
+  blacklist: string[];
+  customInstructions: string;
+}
+
+export interface InputData {
+  tonightsFlavors: string[];
+  users: User[];
+}
+
+export interface Recommendation {
+  id: string;
+  recommend: boolean;
+}
+
+async function processFlavorPreferences(
+  jsonData: InputData
+): Promise<Recommendation[]> {
   console.log("Processing flavor preferences with JSON data:", jsonData);
   const model = genAI.getGenerativeModel({
     model: "gemini-1.5-pro",
     generationConfig: { responseMimeType: "application/json" },
   });
 
-  let prompt = `
+  const prompt = `
 Process user flavor preferences and tonight's flavors according to these guidelines:
 
 1. Recommend flavors that exactly match or are substrings of whitelist items. Ignore case and special characters (e.g., "cookies & cream" matches "Cookies and Cream").
@@ -92,51 +104,41 @@ Explanation (not to be included in output): User 1 gets a recommendation because
 Below is the real array.
 ${JSON.stringify(jsonData, null, 2)}
 `;
-  let result = await model.generateContent(prompt);
 
-  console.log("Recommendation result:", result.response.text());
-  return result.response.text();
-}
-
-export async function POST(request: NextRequest) {
   try {
-    let { tonightsFlavors } = await request.json();
+    const result = await model.generateContent(prompt);
+    const responseText = result.response.text();
+    console.log("Recommendation result:", responseText);
 
-    if (!tonightsFlavors || !Array.isArray(tonightsFlavors)) {
-      throw new Error("Invalid or missing tonightsFlavors");
+    // Parse the response and validate it
+    let recommendations: Recommendation[];
+    try {
+      recommendations = JSON.parse(responseText);
+      if (
+        !Array.isArray(recommendations) ||
+        !recommendations.every(isValidRecommendation)
+      ) {
+        throw new Error("Invalid response format");
+      }
+    } catch (parseError) {
+      console.error("Error parsing AI response:", parseError);
+      throw new Error("Failed to parse AI response");
     }
 
-    // Fetch all users from the database
-    const users = await getAllUsers();
-
-    let jsonData = {
-      tonightsFlavors,
-      users: await Promise.all(
-        users.map(async (user) => ({
-          id: user.id.toString(),
-          whitelist: await getWhitelist(user.email ?? ""),
-          blacklist: await getBlacklist(user.email ?? ""),
-          customInstructions: await getCustomInstructions(user.email ?? ""),
-        }))
-      ),
-    };
-
-    console.log("Final JSON data for processing:", jsonData);
-
-    let recommendationsJson = await processFlavorPreferences(jsonData);
-
-    // Parse the JSON string and stringify it again to ensure valid JSON
-    let parsedRecommendations = JSON.parse(recommendationsJson);
-    console.log("Parsed recommendations:", parsedRecommendations);
-    return NextResponse.json(parsedRecommendations);
+    return recommendations;
   } catch (error) {
-    console.error("Error:", error);
-    return NextResponse.json(
-      {
-        error: "An error occurred while processing the request.",
-        details: (error as Error).message,
-      },
-      { status: 500 }
-    );
+    console.error("Error processing flavor preferences:", error);
+    throw new Error("Failed to process flavor preferences");
   }
 }
+
+function isValidRecommendation(obj: any): obj is Recommendation {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    typeof obj.id === "string" &&
+    typeof obj.recommend === "boolean"
+  );
+}
+
+export { processFlavorPreferences };

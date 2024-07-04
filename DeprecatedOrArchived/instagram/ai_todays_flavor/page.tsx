@@ -13,7 +13,7 @@ export default function AiTodaysFlavor() {
   useEffect(() => {
     async function fetchFlavors() {
       try {
-        const response = await fetch("/api/instagram/ai_todays_flavor", {
+        const response = await fetch("/api/core_service/ai_todays_flavor", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

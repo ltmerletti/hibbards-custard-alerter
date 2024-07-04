@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface CustomInstructionsProps {
   instructions: string;
@@ -9,7 +9,12 @@ interface CustomInstructionsProps {
   className?: string;
 }
 
-export default function CustomInstructions({ instructions, email, updateInstructions, className }: CustomInstructionsProps) {
+export default function CustomInstructions({
+  instructions,
+  email,
+  updateInstructions,
+  className,
+}: CustomInstructionsProps) {
   const [localInstructions, setLocalInstructions] = useState(instructions);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -31,7 +36,7 @@ export default function CustomInstructions({ instructions, email, updateInstruct
   return (
     <div className={`p-6 rounded-lg shadow-lg ${className}`}>
       <h2 className="text-2xl font-bold mb-4">Custom Instructions</h2>
-      <div 
+      <div
         className="mt-4 min-h-[8rem] p-3 rounded bg-gray-800 cursor-text"
         onClick={handleClick}
       >
@@ -45,7 +50,7 @@ export default function CustomInstructions({ instructions, email, updateInstruct
           />
         ) : (
           <p className="text-gray-300">
-            {localInstructions || 'Click here to add custom instructions.'}
+            {localInstructions || "Click here to add custom instructions."}
           </p>
         )}
       </div>
