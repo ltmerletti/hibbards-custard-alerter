@@ -1,6 +1,5 @@
 // File: /app/api/instagram/route.ts
 
-import { NextResponse } from "next/server";
 import { formatInTimeZone } from "date-fns-tz";
 
 interface InstagramPost {
@@ -19,7 +18,7 @@ interface ParsedPost {
   caption: string;
 }
 
-interface ParsedData {
+export interface ParsedData {
   data: {
     items: ParsedPost[];
   };
@@ -44,37 +43,36 @@ function parseInstagramPosts(data: any): ParsedData {
   return { data: { items: parsedPosts } };
 }
 
-export async function GET(): Promise<NextResponse> {
+export async function fetchInstagramData(): Promise<ParsedData> {
   const url =
     "https://instagram-scraper-20231.p.rapidapi.com/userposts/1385181737/12/%7Bend_cursor%7D";
-  let options = {
+  const options = {
     method: "GET",
     headers: {
-      "x-rapidapi-key": process.env.INSTAGRAM_UNOFFICIAL_API_KEY || "",
+      "x-rapidapi-key": process.env.INSTAGRAM_UNOFFICIAL_API_KEY ?? "",
       "x-rapidapi-host": "instagram-scraper-20231.p.rapidapi.com",
     },
   };
 
   try {
-    let response = await fetch(url, options);
-    let result = await response.text();
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const result = await response.text();
     console.log("Raw API response:", result);
 
     // Parse the result as JSON
-    let jsonResult = JSON.parse(result);
+    const jsonResult = JSON.parse(result);
 
     // Parse the Instagram posts
-    let parsed_data = parseInstagramPosts(jsonResult);
-
-    return NextResponse.json(parsed_data);
+    return parseInstagramPosts(jsonResult);
   } catch (error) {
-    console.error("Error in Instagram API route:", error);
-    return NextResponse.json(
-      {
-        error: "Failed to fetch Instagram data",
-        details: (error as Error).message,
-      },
-      { status: 500 }
+    console.error("Error fetching Instagram data:", error);
+    throw new Error(
+      `Failed to fetch Instagram data: ${
+        error instanceof Error ? error.message : String(error)
+      }`
     );
   }
 }

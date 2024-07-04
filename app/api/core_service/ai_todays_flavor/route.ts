@@ -1,19 +1,29 @@
-// File: /app/api/instagram/ai_todays_flavor/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI, GenerativeModel } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
+// Ensure the API key is set
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+if (!GEMINI_API_KEY) {
+  throw new Error("GEMINI_API_KEY is not set in the environment variables");
+}
 
-async function extractFlavors(jsonData: any): Promise<string> {
-  const model = genAI.getGenerativeModel({
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+
+interface FlavorResponse {
+  flavors: string[];
+}
+
+let cachedFlavors: string[] | null = null;
+
+async function getModel(): Promise<GenerativeModel> {
+  return genAI.getGenerativeModel({
     model: "gemini-1.5-flash",
     generationConfig: { responseMimeType: "application/json" },
   });
+}
 
-  let currentDate = new Date().toISOString().split("T")[0];
-
-  let prompt = `
+function generatePrompt(jsonData: any, currentDate: string): string {
+  return `
 Today's date is ${currentDate}.
 Given the following JSON data, extract the daily flavors mentioned in the most recent post's caption.
 Respond only with a JSON object containing a single key "flavors" with an array of flavor strings.
@@ -24,37 +34,52 @@ Ignore the core four flavors, and instead just display the 3 (give or take) spec
 JSON data:
 ${JSON.stringify(jsonData, null, 2)}
 `;
-
-  let result = await model.generateContent(prompt);
-
-  return result.response.text();
 }
 
-let parsedFlavors: string[] | null;
+export async function extractFlavors(jsonData: any): Promise<string[]> {
+  const model = await getModel();
+  const currentDate = new Date().toISOString().split("T")[0];
+  const prompt = generatePrompt(jsonData, currentDate);
 
-export async function POST(request: NextRequest) {
   try {
-    let jsonData = await request.json();
-    let flavorsJson = await extractFlavors(jsonData);
-
-    // Parse the JSON string and stringify it again to ensure valid JSON
-    parsedFlavors = JSON.parse(flavorsJson);
-    return NextResponse.json(parsedFlavors);
+    const result = await model.generateContent(prompt);
+    const flavorsJson = result.response.text();
+    const parsedFlavors: FlavorResponse = JSON.parse(flavorsJson);
+    return parsedFlavors.flavors || [];
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error extracting flavors:", error);
+    throw new Error("Failed to extract flavors from AI response");
+  }
+}
+
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  try {
+    const jsonData = await request.json();
+    const flavors = await extractFlavors(jsonData);
+    cachedFlavors = flavors;
+    return NextResponse.json({ flavors });
+  } catch (error) {
+    console.error("Error in POST request:", error);
     return NextResponse.json(
       {
         error: "An error occurred while processing the request.",
-        details: (error as Error).message,
+        details: error instanceof Error ? error.message : String(error),
       },
       { status: 500 }
     );
   }
 }
-export async function GET(request: NextRequest) {
-  return NextResponse.json(parsedFlavors);
+
+export async function GET(): Promise<NextResponse> {
+  if (cachedFlavors === null) {
+    return NextResponse.json(
+      { error: "Flavors have not been extracted yet" },
+      { status: 404 }
+    );
+  }
+  return NextResponse.json({ flavors: cachedFlavors });
 }
 
-export async function getFlavors() {
-  return parsedFlavors;
+export async function getFlavors(): Promise<string[] | null> {
+  return cachedFlavors;
 }

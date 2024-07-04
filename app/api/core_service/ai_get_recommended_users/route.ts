@@ -1,3 +1,5 @@
+//app/api/core_service/ai_get_recommended_users/route.ts
+
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");

@@ -1,3 +1,5 @@
+//app/api/core_service/email/route.ts
+
 import nodemailer from "nodemailer";
 import { NextRequest, NextResponse } from "next/server";
 import { getFlavors } from "../ai_todays_flavor/route";

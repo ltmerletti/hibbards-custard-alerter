@@ -1,9 +1,14 @@
+//app/api/core_service/make_jsonData_string_with_users_and_flavors
+
 import {
   getAllUsers,
   getWhitelist,
   getBlacklist,
   getCustomInstructions,
 } from "../../../db";
+
+import { fetchInstagramData, ParsedData } from "../../instagram/route";
+import { extractFlavors } from "../ai_todays_flavor/route";
 
 interface InstagramPost {
   created_at: string;
@@ -19,33 +24,10 @@ interface InstagramData {
 export async function generateJsonDataStringWithUsersAndFlavors() {
   try {
     // Fetch Instagram data
-    let parsed_data: InstagramData;
-    const instagramResponse = await fetch(`/api/instagram`);
-    if (!instagramResponse.ok) {
-      throw new Error(`HTTP error! status: ${instagramResponse.status}`);
-    }
-    parsed_data = await instagramResponse.json();
-    if (!parsed_data.data || !Array.isArray(parsed_data.data.items)) {
-      throw new Error("Invalid data structure received from API");
-    }
+    const parsed_data: ParsedData = await fetchInstagramData();
 
-    // Fetch flavors
-    const flavorResponse = await fetch(`/api/instagram/ai_todays_flavor`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        parsed_captions: parsed_data.data.items,
-      }),
-    });
-
-    if (!flavorResponse.ok) {
-      throw new Error("Failed to fetch flavors");
-    }
-
-    const flavorData = await flavorResponse.json();
-    const tonightsFlavors = flavorData.flavors || [];
+    // Extract flavors directly using the function
+    const tonightsFlavors = await extractFlavors(parsed_data.data.items);
 
     // Fetch all users from the database
     const users = await getAllUsers();
@@ -62,10 +44,15 @@ export async function generateJsonDataStringWithUsersAndFlavors() {
       ),
     };
 
-    console.log("Final JSON data for processing:", jsonData);
+    // Use JSON.stringify with spacing for more detailed logging
+    console.log(
+      "Final JSON data for processing:",
+      JSON.stringify(jsonData, null, 2)
+    );
 
     return jsonData;
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error in generateJsonDataStringWithUsersAndFlavors:", error);
+    throw error; // Re-throw the error so it can be caught in the calling function
   }
 }
