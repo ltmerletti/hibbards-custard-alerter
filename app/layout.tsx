@@ -2,7 +2,7 @@ import "./globals.css";
 
 let title = "Hibbard's Custard Notifier";
 let description =
-  "This is a notifier webapp made to notify you whenever a flavor you're interested in at Hibbard's comes up.";
+  "This is a custard notifier webapp made to notify you whenever a flavor you're interested in at Hibbard's comes up.";
 
 export const metadata = {
   title,
