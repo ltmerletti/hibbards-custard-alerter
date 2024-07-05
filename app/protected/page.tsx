@@ -1,5 +1,6 @@
 import { auth, signOut } from "app/auth";
 import Link from "next/link";
+import DeleteAccount from "./deleteAccountButton";
 
 export default async function ProtectedPage() {
   let session = await auth();
@@ -21,6 +22,9 @@ export default async function ProtectedPage() {
           </p>
         </div>
         <SignOut />
+        {session?.user?.email && (
+          <DeleteAccount email={session.user.email} />
+        )}{" "}
         <div className="text-center">
           <Link
             href="/"

@@ -165,3 +165,23 @@ async function ensureFlavorsTableExists() {
 
   return table;
 }
+
+export async function deleteUser(email: string) {
+  try {
+    const users = await ensureTableExists();
+
+    const result = await db.delete(users).where(eq(users.email, email));
+
+    if (result.length === 0) {
+      return { success: false, message: "User not found" };
+    }
+
+    return { success: true, message: "User deleted successfully" };
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    return {
+      success: false,
+      message: "An error occurred while deleting the user",
+    };
+  }
+}
