@@ -120,3 +120,48 @@ export async function setCustomInstructions(
     .set({ customInstructions })
     .where(eq(users.email, email));
 }
+
+// Add these functions to get and set flavors
+export async function getFlavor() {
+  const dailyFlavors = await ensureFlavorsTableExists();
+  const result = await db.select().from(dailyFlavors).limit(1);
+  return result[0]?.flavor || [];
+}
+
+export async function setFlavors(flavor: string[]) {
+  const dailyFlavors = await ensureFlavorsTableExists();
+  const existingFlavors = await getFlavor();
+
+  if (existingFlavors.length > 0) {
+    // Update the first row if it exists
+    await db.update(dailyFlavors).set({ flavor }).where(eq(dailyFlavors.id, 1));
+  } else {
+    // Insert a new row if no rows exist
+    await db.insert(dailyFlavors).values({ flavor });
+  }
+}
+
+// Add this function to ensure the DailyFlavors table exists
+async function ensureFlavorsTableExists() {
+  const result = await client`
+    SELECT EXISTS (
+      SELECT FROM information_schema.tables 
+      WHERE table_schema = 'public' 
+      AND table_name = 'DailyFlavors'
+    );`;
+
+  if (!result[0].exists) {
+    await client`
+      CREATE TABLE "DailyFlavors" (
+        id SERIAL PRIMARY KEY,
+        flavor TEXT[]
+      );`;
+  }
+
+  const table = pgTable("DailyFlavors", {
+    id: serial("id").primaryKey(),
+    flavor: text("flavor").array(),
+  });
+
+  return table;
+}
