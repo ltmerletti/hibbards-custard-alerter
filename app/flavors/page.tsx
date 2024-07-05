@@ -18,9 +18,7 @@ export default function Flavors() {
         return response.json();
       })
       .then((data) => {
-        if (Array.isArray(data)) {
-          setFlavors(data);
-        } else if (data && Array.isArray(data.flavors)) {
+        if (data && Array.isArray(data.flavors)) {
           setFlavors(data.flavors);
         } else {
           throw new Error("Unexpected data structure");

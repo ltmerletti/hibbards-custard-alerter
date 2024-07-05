@@ -1,3 +1,3 @@
-interface FlavorData {
+export interface FlavorData {
   flavor: string[];
 }
