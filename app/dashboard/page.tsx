@@ -11,7 +11,7 @@ import Link from "next/link";
 import TagList from "./TagList";
 import CustomInstructions from "./CustomInstructions";
 import Footer from "@/components/footer";
-import ThemeToggle from "./ThemeToggle";
+import NavBar from "@/components/NavBar";
 
 const updateWhitelist = async (...args: Parameters<typeof setWhitelist>) => {
   "use server";
@@ -40,22 +40,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-light from-custom-light-from to-custom-light-to dark:bg-gradient-dark dark:from-custom-dark-from dark:to-custom-dark-to text-gray-900">
-      <header className="bg-gray-800 shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <Link href="/" className="text-xl font-bold text-white">
-            Hibbard&apos;s Custard
-          </Link>
-          <div className="flex items-center space-x-4">
-            <ThemeToggle />
-            <Link
-              href="/protected"
-              className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Account
-            </Link>
-          </div>
-        </div>
-      </header>
+      <NavBar />
 
       <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
