@@ -7,19 +7,9 @@ import {
   getCustomInstructions,
 } from "../../../db";
 
-import { fetchInstagramData, ParsedData } from "../../instagram/get_instagram_data";
+import { fetchInstagramData } from "../../instagram/get_instagram_data";
 import { extractFlavors } from "../ai_todays_flavor/extract_flavors";
-
-interface InstagramPost {
-  created_at: string;
-  caption: string;
-}
-
-interface InstagramData {
-  data: {
-    items: InstagramPost[];
-  };
-}
+import { ParsedData } from "../../../../types/ParsedData";
 
 export async function generateJsonDataStringWithUsersAndFlavors() {
   try {

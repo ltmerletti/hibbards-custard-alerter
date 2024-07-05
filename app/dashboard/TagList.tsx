@@ -61,11 +61,16 @@ export default function TagList({
   };
 
   return (
-    <div className={`p-6 rounded-lg shadow-lg ${className}`}>
-      <h2 className="text-2xl font-bold mb-4">{title}</h2>
+    <div className={`p-6 rounded-lg shadow-sm ${className}`}>
+      <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+        {title}
+      </h2>
       <ul className="space-y-2">
         {localTags.map((tag, index) => (
-          <li key={index} className="flex items-center space-x-2 group">
+          <li
+            key={index}
+            className="flex items-center justify-between bg-white dark:bg-gray-600 rounded-md p-2 shadow-sm"
+          >
             {editingIndex === index ? (
               <input
                 type="text"
@@ -77,22 +82,24 @@ export default function TagList({
                 }}
                 onBlur={() => handleEdit(index, localTags[index])}
                 onKeyDown={(e) => handleKeyDown(e, index)}
-                className="bg-gray-800 text-white px-2 py-1 rounded w-full"
+                className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded w-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 autoFocus
               />
             ) : (
               <>
-                <span className="flex-grow">{tag}</span>
-                <div className="flex items-center space-x-1">
+                <span className="flex-grow text-gray-800 dark:text-gray-200">
+                  {tag}
+                </span>
+                <div className="flex items-center space-x-2">
                   <button
                     onClick={() => setEditingIndex(index)}
-                    className="text-gray-400 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
                   >
                     <PencilIcon className="h-4 w-4" />
                   </button>
                   <button
                     onClick={() => handleDelete(index)}
-                    className="text-gray-400 hover:text-white"
+                    className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
                   >
                     <XMarkIcon className="h-4 w-4" />
                   </button>
@@ -109,13 +116,13 @@ export default function TagList({
           onChange={(e) => setNewTag(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Add new tag"
-          className="bg-gray-800 text-white px-2 py-1 rounded flex-grow"
+          className="bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-md flex-grow focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
         <button
           onClick={handleAdd}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded transition-colors duration-200"
+          className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-md transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          <PlusIcon className="h-4 w-4" />
+          <PlusIcon className="h-5 w-5" />
         </button>
       </div>
     </div>

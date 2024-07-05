@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 
 interface CustomInstructionsProps {
@@ -34,10 +33,14 @@ export default function CustomInstructions({
   };
 
   return (
-    <div className={`p-6 rounded-lg shadow-lg ${className}`}>
-      <h2 className="text-2xl font-bold mb-4">Custom Instructions</h2>
+    <div className={`p-6 rounded-md shadow-sm ${className}`}>
+      <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+        Edit Custom Instructions
+      </h2>
       <div
-        className="mt-4 min-h-[8rem] p-3 rounded bg-gray-800 cursor-text"
+        className={`mt-2 min-h-[8rem] p-3 rounded-md bg-gray-100 dark:bg-gray-800 cursor-text transition-colors duration-200 ${
+          isEditing ? "bg-gray-200 dark:bg-gray-700" : ""
+        }`}
         onClick={handleClick}
       >
         {isEditing ? (
@@ -45,11 +48,11 @@ export default function CustomInstructions({
             value={localInstructions}
             onChange={(e) => setLocalInstructions(e.target.value)}
             onBlur={handleSave}
-            className="bg-transparent text-white w-full h-full resize-none focus:outline-none"
+            className="w-full h-full resize-none bg-transparent focus:outline-none text-gray-800 dark:text-gray-200"
             autoFocus
           />
         ) : (
-          <p className="text-gray-300">
+          <p className="text-gray-700 dark:text-gray-300">
             {localInstructions || "Click here to add custom instructions."}
           </p>
         )}

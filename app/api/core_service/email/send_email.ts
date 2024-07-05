@@ -17,12 +17,6 @@ async function getFlavorsToString(): Promise<string> {
   return flavors.map((flavor) => `- ${flavor}`).join("\n");
 }
 
-interface EmailOptions {
-  to: string[];
-  subject: string;
-  text: string;
-}
-
 async function sendEmail({ to, subject, text }: EmailOptions): Promise<void> {
   await transporter.sendMail({
     from: process.env.EMAIL_USER,

@@ -1,7 +1,7 @@
 .footer {
   background-color: #070707;
   color: white;
-  padding: 3rem 0 1.5rem; /* Reduced bottom padding from 3rem to 1.5rem */
+  padding: 3rem 0 1.5rem;
 }
 
 .container {
@@ -71,8 +71,8 @@
 }
 
 .footerBottom {
-  margin-top: 2rem; /* Reduced from 3rem to 2rem */
-  padding-top: 1rem; /* Reduced from 2rem to 1rem */
+  margin-top: 2rem;
+  padding-top: 1rem;
   border-top: 1px solid #4a5568;
   text-align: center;
 }
@@ -88,6 +88,6 @@
   }
 
   .footerSection {
-    margin-bottom: 1.5rem; /* Slightly reduced for mobile */
+    margin-bottom: 1.5rem;
   }
 }

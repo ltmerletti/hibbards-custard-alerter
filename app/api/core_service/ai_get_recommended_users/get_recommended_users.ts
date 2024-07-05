@@ -1,25 +1,11 @@
 //app/api/core_service/ai_get_recommended_users/route.ts
 
+import { InputData } from "../../../../types/InputData";
+import { Recommendation } from "../../../../types/Recommendation";
+
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
-
-export interface User {
-  id: string;
-  whitelist: string[];
-  blacklist: string[];
-  customInstructions: string;
-}
-
-export interface InputData {
-  tonightsFlavors: string[];
-  users: User[];
-}
-
-export interface Recommendation {
-  id: string;
-  recommend: boolean;
-}
 
 async function processFlavorPreferences(
   jsonData: InputData

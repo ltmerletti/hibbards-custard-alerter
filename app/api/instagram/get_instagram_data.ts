@@ -2,6 +2,8 @@
 
 import { formatInTimeZone } from "date-fns-tz";
 
+import { ParsedData } from "../../../types/ParsedData";
+
 interface InstagramPost {
   taken_at_timestamp: number;
   edge_media_to_caption: {
@@ -10,17 +12,6 @@ interface InstagramPost {
         text: string;
       };
     }>;
-  };
-}
-
-interface ParsedPost {
-  created_at: string;
-  caption: string;
-}
-
-export interface ParsedData {
-  data: {
-    items: ParsedPost[];
   };
 }
 
