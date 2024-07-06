@@ -13,11 +13,6 @@ interface InstagramPost {
 }
 
 function parseInstagramPosts(data: any): ParsedData {
-  if (!data || !data.items || !Array.isArray(data.items)) {
-    console.error("Unexpected data structure:", data);
-    throw new Error("Invalid data structure");
-  }
-
   let posts: InstagramPost[] = data.items;
 
   let parsedPosts = posts.map((post) => {
@@ -29,7 +24,7 @@ function parseInstagramPosts(data: any): ParsedData {
     );
     return {
       created_at: formattedDate,
-      caption: post.caption?.text || "",
+      caption: post.caption.text || "",
     };
   });
 
@@ -38,6 +33,7 @@ function parseInstagramPosts(data: any): ParsedData {
 
 export async function fetchInstagramData(): Promise<ParsedData> {
   console.log("Fetching Instagram data...");
+  
   // const url =
   //   "https://instagram-scraper-20231.p.rapidapi.com/userposts/1385181737/12/%7Bend_cursor%7D";
   // const options = {
