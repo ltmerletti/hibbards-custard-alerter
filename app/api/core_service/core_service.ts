@@ -9,23 +9,33 @@ import { Recommendation } from "../../../types/Recommendation";
 
 export async function runCoreService(): Promise<CoreServiceResult> {
   try {
+    console.log("Generating combined data...");
     const combinedData: InputData | undefined =
       await generateJsonDataStringWithUsersAndFlavors();
+
+    console.log("Combined data generated:", combinedData);
 
     if (!combinedData) {
       throw new Error("Failed to generate combined data");
     }
 
+    console.log("Processing flavor preferences...");
     const validUsers: Recommendation[] = await processFlavorPreferences(
       combinedData
     );
 
+    console.log("Valid users:", validUsers);
+
     // Filter users marked as "true" for sending emails
+    console.log("Filtering users for email sending...");
     const usersToSendEmail = validUsers.filter(
       (user) => user.recommend === true
     );
 
+    console.log("Users to send email to:", usersToSendEmail);
+
     // Pull their email addresses from the database based on their IDs
+    console.log("Fetching email addresses from database...");
     const email_addresses = await Promise.all(
       usersToSendEmail.map(async (user) => {
         const userId = parseInt(user.id, 10);
@@ -37,18 +47,26 @@ export async function runCoreService(): Promise<CoreServiceResult> {
       })
     );
 
+    console.log("Email addresses fetched:", email_addresses);
+
     // Flatten the array and filter out any null email addresses
+    console.log("Flattening and filtering email addresses...");
     const validEmailAddresses = email_addresses
       .flat()
       .filter((item): item is { email: string } => item.email !== null)
       .map((item) => item.email);
+
+    console.log("Valid email addresses:", validEmailAddresses);
 
     if (validEmailAddresses.length === 0) {
       return { message: "No valid email addresses found" };
     }
 
     // Send the email to them
+    console.log("Sending emails...");
     await sendFlavorEmail(validEmailAddresses);
+
+    console.log("Emails sent successfully");
 
     return {
       message: "Emails sent successfully",
