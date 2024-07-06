@@ -5,21 +5,17 @@ import { formatInTimeZone } from "date-fns-tz";
 import { ParsedData } from "../../../types/ParsedData";
 
 interface InstagramPost {
-  taken_at_timestamp: number;
-  edge_media_to_caption: {
-    edges: Array<{
-      node: {
-        text: string;
-      };
-    }>;
+  taken_at: number;
+  caption: {
+    text: string;
   };
 }
 
 function parseInstagramPosts(data: any): ParsedData {
-  let posts: InstagramPost[] = data.data.edges.map((edge: any) => edge.node);
+  let posts: InstagramPost[] = data.items;
 
   let parsedPosts = posts.map((post) => {
-    let date = new Date(post.taken_at_timestamp * 1000);
+    let date = new Date(post.taken_at * 1000);
     let formattedDate = formatInTimeZone(
       date,
       "America/New_York",
@@ -27,7 +23,7 @@ function parseInstagramPosts(data: any): ParsedData {
     );
     return {
       created_at: formattedDate,
-      caption: post.edge_media_to_caption.edges[0]?.node.text || "",
+      caption: post.caption.text || "",
     };
   });
 
@@ -57,7 +53,7 @@ export async function fetchInstagramData(): Promise<ParsedData> {
     const jsonResult = JSON.parse(result);
 
     // Parse the Instagram posts
-    return parseInstagramPosts(jsonResult);
+    return parseInstagramPosts(jsonResult.data);
   } catch (error) {
     console.error("Error fetching Instagram data:", error);
     throw new Error(
