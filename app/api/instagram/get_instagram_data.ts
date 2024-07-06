@@ -5,7 +5,6 @@ import { formatInTimeZone } from "date-fns-tz";
 import { ParsedData } from "../../../types/ParsedData";
 
 import { response } from "../../../examples/api-response-july-6";
-
 interface InstagramPost {
   taken_at: number;
   caption: {
@@ -14,27 +13,25 @@ interface InstagramPost {
 }
 
 function parseInstagramPosts(data: any): ParsedData {
-  console.log("Parsing Instagram posts...");
-  console.log("Data:", data);
+  if (!data || !data.items || !Array.isArray(data.items)) {
+    console.error("Unexpected data structure:", data);
+    throw new Error("Invalid data structure");
+  }
+
   let posts: InstagramPost[] = data.items;
-  console.log("Posts:", posts);
 
   let parsedPosts = posts.map((post) => {
-    console.log("Parsing post:", post);
     let date = new Date(post.taken_at * 1000);
-    console.log("Date:", date);
     let formattedDate = formatInTimeZone(
       date,
       "America/New_York",
       "MMMM d, yyyy 'at' h:mm a zzz"
     );
-    console.log("Formatted date:", formattedDate);
     return {
       created_at: formattedDate,
-      caption: post.caption.text || "",
+      caption: post.caption?.text || "",
     };
   });
-  console.log("Parsed posts:", parsedPosts);
 
   return { data: { items: parsedPosts } };
 }
