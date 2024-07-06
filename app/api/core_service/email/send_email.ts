@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 
 async function getFlavorsToString(): Promise<string> {
   const flavors = await getFlavors();
-  return flavors.map((flavor) => `- ${flavor}`).join("\n");
+  return flavors.map((flavor) => ` ${flavor}`).join("\n");
 }
 
 async function sendEmail({ to, subject, html }: EmailOptions): Promise<void> {
