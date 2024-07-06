@@ -2,7 +2,7 @@ import { ParsedData } from "../../../types/ParsedData";
 import { formatInTimeZone } from "date-fns-tz";
 import { response } from "../../../examples/api-response-july-6"; // Import the static response data
 
-const USE_STATIC_DATA = true; // Toggle this to switch between API and static data
+const USE_STATIC_DATA = false; // Toggle this to switch between API and static data
 
 interface InstagramPost {
   taken_at: number;
