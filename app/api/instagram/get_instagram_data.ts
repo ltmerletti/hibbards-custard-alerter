@@ -5,20 +5,30 @@ import { formatInTimeZone } from "date-fns-tz";
 import { ParsedData } from "../../../types/ParsedData";
 
 import { response } from "../../../examples/api-response-july-6";
+import { ParsedPost } from "types/ParsedPost";
 
+// interface InstagramPost {
+//   taken_at_timestamp: number;
+//   edge_media_to_caption: {
+//     edges: Array<{
+//       node: {
+//         text: string;
+//       };
+//     }>;
+//   };
+// }
+
+// function parseInstagramPosts(data: any): ParsedData {
+// let posts: InstagramPost[] = data.data.edges.map((edge: any) => edge.node);
 interface InstagramPost {
   taken_at_timestamp: number;
-  edge_media_to_caption: {
-    edges: Array<{
-      node: {
-        text: string;
-      };
-    }>;
+  caption: {
+    text: string;
   };
 }
 
 function parseInstagramPosts(data: any): ParsedData {
-  let posts: InstagramPost[] = data.data.edges.map((edge: any) => edge.node);
+  let posts: InstagramPost[] = data.items;
 
   let parsedPosts = posts.map((post) => {
     let date = new Date(post.taken_at_timestamp * 1000);
@@ -29,11 +39,18 @@ function parseInstagramPosts(data: any): ParsedData {
     );
     return {
       created_at: formattedDate,
-      caption: post.edge_media_to_caption.edges[0]?.node.text || "",
+      caption: post.caption,
+      // caption: post.edge_media_to_caption.edges[0]?.node.text || "",
     };
   });
 
-  return { data: { items: parsedPosts } };
+  let parsedPostsArray: ParsedPost[] = parsedPosts.map((post) => ({
+    created_at: post.created_at.toString(),
+    caption: post.caption.text,
+  }));
+
+  // return { data: { items: parsedPosts } };
+  return { data: { items: parsedPostsArray } };
 }
 
 export async function fetchInstagramData(): Promise<ParsedData> {
@@ -55,7 +72,7 @@ export async function fetchInstagramData(): Promise<ParsedData> {
     // const result = await response.text();
     // console.log("Raw API response:", result);
 
-    const result = JSON.stringify(response)
+    const result = JSON.stringify(response);
 
     // Parse the result as JSON
     const jsonResult = JSON.parse(result);

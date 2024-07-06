@@ -1,6 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { fetchInstagramData } from "../../instagram/get_instagram_data";
-import { getFlavor, setFlavors } from "@/app/db";
+import { getFlavor } from "@/app/db";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 if (!GEMINI_API_KEY) {
@@ -40,23 +39,7 @@ ${JSON.stringify(jsonData, null, 2)}
   }
 }
 
-export async function getFlavors(): Promise<string[]> {
-  try {
-    let instagramData = await fetchInstagramData();
-    let flavors = await extractFlavors(instagramData);
-
-    // Store the flavors in the database
-    await setFlavors(flavors);
-
-    return flavors;
-  } catch (error) {
-    console.error("Error getting flavors:", error);
-    throw new Error("Failed to get flavors");
-  }
-}
-
 // Define the function to get the flavors
 export async function getFlavorArray(): Promise<string[]> {
-  let flavorData = await getFlavor();
-  return flavorData;
+  return await getFlavor();
 }

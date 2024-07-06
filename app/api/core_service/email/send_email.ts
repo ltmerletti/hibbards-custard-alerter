@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { getFlavors } from "../ai_todays_flavor/extract_flavors";
+import { getFlavor } from "../../../db";
 import { EmailOptions } from "types/EmailOptions";
 
 const transporter = nodemailer.createTransport({
@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 });
 
 async function getFlavorsToString(): Promise<string> {
-  const flavors = await getFlavors();
+  const flavors = await getFlavor();
   return flavors.map((flavor) => ` ${flavor}`).join("\n");
 }
 
@@ -80,6 +80,5 @@ export async function sendFlavorEmail(
 
 </html> 
 `;
-
   await sendEmail({ to: email_addresses, subject, html });
 }
