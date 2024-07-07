@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { getFlavor } from "@/app/db";
+import { getFlavor, setFlavors } from "@/app/db";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 if (!GEMINI_API_KEY) {
@@ -14,9 +14,9 @@ export async function extractFlavors(jsonData: any): Promise<string[]> {
     generationConfig: { responseMimeType: "application/json" },
   });
 
-  const currentDate = new Date().toISOString().split("T")[0];
+  let currentDate = new Date().toISOString().split("T")[0];
 
-  const prompt = `
+  let prompt = `
 Today's date is ${currentDate}.
 Given the following JSON data, extract the daily flavors mentioned in the most recent post's caption.
 Respond only with a JSON object containing a single key "flavors" with an array of flavor strings.
@@ -32,6 +32,7 @@ ${JSON.stringify(jsonData, null, 2)}
     let result = await model.generateContent(prompt);
     let flavorsJson = result.response.text();
     let parsedFlavors = JSON.parse(flavorsJson);
+    await setFlavors(parsedFlavors.flavors || []);
     return parsedFlavors.flavors || [];
   } catch (error) {
     console.error("Error extracting flavors:", error);

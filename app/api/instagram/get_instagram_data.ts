@@ -46,15 +46,15 @@ export async function fetchInstagramData(): Promise<ParsedData> {
     };
 
     try {
-      const response = await fetch(url, options);
+      let response = await fetch(url, options);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const result = await response.text();
+      let result = await response.text();
       console.log("Raw API response:", result);
 
       // Parse the result as JSON
-      const jsonResult = JSON.parse(result);
+      let jsonResult = JSON.parse(result);
 
       // Parse the Instagram posts
       return parseInstagramPosts(jsonResult);

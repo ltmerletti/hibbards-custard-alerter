@@ -16,12 +16,12 @@ export async function getUser(email: string) {
 }
 
 export async function getAllUsers() {
-  const users = await ensureTableExists();
+  let users = await ensureTableExists();
   return await db.select().from(users);
 }
 
 export async function getUserEmailAddressById(id: number) {
-  const users = await ensureTableExists();
+  let users = await ensureTableExists();
   return await db
     .select({ email: users.email })
     .from(users)
@@ -129,8 +129,8 @@ export async function getFlavor() {
 }
 
 export async function setFlavors(flavor: string[]) {
-  const dailyFlavors = await ensureFlavorsTableExists();
-  const existingFlavors = await getFlavor();
+  let dailyFlavors = await ensureFlavorsTableExists();
+  let existingFlavors = await getFlavor();
 
   if (existingFlavors.length > 0) {
     // Update the first row if it exists

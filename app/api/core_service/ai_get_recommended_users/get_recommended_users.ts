@@ -94,8 +94,8 @@ ${JSON.stringify(jsonData, null, 2)}
 `;
 
   try {
-    const result = await model.generateContent(prompt);
-    const responseText = result.response.text();
+    let result = await model.generateContent(prompt);
+    let responseText = result.response.text();
     console.log("Recommendation result:", responseText);
 
     // Parse the response and validate it

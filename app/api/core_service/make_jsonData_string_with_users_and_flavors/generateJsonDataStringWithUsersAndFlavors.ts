@@ -14,15 +14,15 @@ import { ParsedData } from "../../../../types/ParsedData";
 export async function generateJsonDataStringWithUsersAndFlavors() {
   try {
     // Fetch Instagram data
-    const parsed_data: ParsedData = await fetchInstagramData();
+    let parsed_data: ParsedData = await fetchInstagramData();
 
     // Extract flavors directly using the function
-    const tonightsFlavors = await extractFlavors(parsed_data.data.items);
+    let tonightsFlavors = await extractFlavors(parsed_data.data.items);
 
     // Fetch all users from the database
-    const users = await getAllUsers();
+    let users = await getAllUsers();
 
-    const jsonData = {
+    let jsonData = {
       tonightsFlavors,
       users: await Promise.all(
         users.map(async (user) => ({

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { runCoreService } from "./core_service";
 
 export async function POST(request: NextRequest) {
-  const result = await runCoreService();
+  let result = await runCoreService();
 
   if (result.error) {
     return NextResponse.json(result, { status: 500 });

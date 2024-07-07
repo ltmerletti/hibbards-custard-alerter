@@ -10,7 +10,7 @@ import { Recommendation } from "../../../types/Recommendation";
 export async function runCoreService(): Promise<CoreServiceResult> {
   try {
     console.log("Generating combined data...");
-    const combinedData: InputData | undefined =
+    let combinedData: InputData | undefined =
       await generateJsonDataStringWithUsersAndFlavors();
 
     console.log("Combined data generated:", combinedData);
@@ -20,7 +20,7 @@ export async function runCoreService(): Promise<CoreServiceResult> {
     }
 
     console.log("Processing flavor preferences...");
-    const validUsers: Recommendation[] = await processFlavorPreferences(
+    let validUsers: Recommendation[] = await processFlavorPreferences(
       combinedData
     );
 
@@ -28,7 +28,7 @@ export async function runCoreService(): Promise<CoreServiceResult> {
 
     // Filter users marked as "true" for sending emails
     console.log("Filtering users for email sending...");
-    const usersToSendEmail = validUsers.filter(
+    let usersToSendEmail = validUsers.filter(
       (user) => user.recommend === true
     );
 
@@ -36,9 +36,9 @@ export async function runCoreService(): Promise<CoreServiceResult> {
 
     // Pull their email addresses from the database based on their IDs
     console.log("Fetching email addresses from database...");
-    const email_addresses = await Promise.all(
+    let email_addresses = await Promise.all(
       usersToSendEmail.map(async (user) => {
-        const userId = parseInt(user.id, 10);
+        let userId = parseInt(user.id, 10);
         if (isNaN(userId)) {
           console.error(`Invalid user ID: ${user.id}`);
           return [];
@@ -51,7 +51,7 @@ export async function runCoreService(): Promise<CoreServiceResult> {
 
     // Flatten the array and filter out any null email addresses
     console.log("Flattening and filtering email addresses...");
-    const validEmailAddresses = email_addresses
+    let validEmailAddresses = email_addresses
       .flat()
       .filter((item): item is { email: string } => item.email !== null)
       .map((item) => item.email);
