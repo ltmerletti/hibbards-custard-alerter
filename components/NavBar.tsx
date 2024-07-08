@@ -1,12 +1,66 @@
-// components/NavBar.tsx
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "@/components/ThemeToggle";
+import { useState, useEffect } from "react";
 
 export default function NavBar() {
   const pathname = usePathname();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    setIsDarkMode(darkModeMediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => setIsDarkMode(e.matches);
+    darkModeMediaQuery.addEventListener('change', handleChange);
+
+    return () => darkModeMediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  const navStyle = {
+    position: 'static' as const,
+    height: '80px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '0 40px',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    backdropFilter: 'blur(10px)',
+    color: isDarkMode ? '#ffffff' : '#333333',
+    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+    borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+  };
+
+  const logoStyle = {
+    fontSize: '1.75rem',
+    fontWeight: 'bold' as const,
+    textDecoration: 'none',
+    color: isDarkMode ? '#ffffff' : '#1a202c',
+    letterSpacing: '0.5px',
+  };
+
+  const navItemsStyle = {
+    display: 'flex',
+    gap: '2rem',
+    alignItems: 'center',
+  };
+
+  const linkStyle = (isActive: boolean) => ({
+    color: isActive 
+      ? (isDarkMode ? '#bb86fc' : '#4a5568') 
+      : (isDarkMode ? '#e2e8f0' : '#718096'),
+    textDecoration: 'none',
+    fontSize: '1rem',
+    fontWeight: isActive ? '600' : 'normal',
+    padding: '0.5rem 0.75rem',
+    borderRadius: '0.375rem',
+    transition: 'all 0.3s ease',
+    backgroundColor: isActive 
+      ? (isDarkMode ? 'rgba(187, 134, 252, 0.1)' : 'rgba(74, 85, 104, 0.1)')
+      : 'transparent',
+  });
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -17,33 +71,22 @@ export default function NavBar() {
   ];
 
   return (
-    <header className="bg-gray-800 shadow-md">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div className="flex justify-between items-center">
+    <nav style={navStyle}>
+      <Link href="/" style={logoStyle}>
+        Hibbard&apos;s Custard
+      </Link>
+      <div style={navItemsStyle}>
+        {navItems.map((item) => (
           <Link
-            href="/"
-            className="text-xl font-bold text-white hover:text-purple-300 transition-colors duration-200"
+            key={item.name}
+            href={item.path}
+            style={linkStyle(pathname === item.path)}
           >
-            Hibbard&apos;s Custard
+            {item.name}
           </Link>
-          <div className="flex space-x-4">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.path}
-                className={`px-3 py-2 rounded-md text-sm font-medium ${
-                  pathname === item.path
-                    ? "bg-gray-900 text-white"
-                    : "text-gray-300 hover:bg-gray-700 hover:text-white"
-                } transition-colors duration-200`}
-              >
-                {item.name}
-              </Link>
-            ))}
-            <ThemeToggle />
-          </div>
-        </div>
-      </nav>
-    </header>
+        ))}
+        <ThemeToggle />
+      </div>
+    </nav>
   );
 }
