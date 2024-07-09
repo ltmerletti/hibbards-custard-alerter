@@ -5,9 +5,9 @@ import NavBar from "@/components/NavBar";
 import Footer from "@/components/footer";
 
 export default function Flavors() {
-  let [flavors, setFlavors] = useState<string[]>([]);
-  let [isLoading, setIsLoading] = useState(true);
-  let [error, setError] = useState<string | null>(null);
+  const [flavors, setFlavors] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setIsLoading(true);

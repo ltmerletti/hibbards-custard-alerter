@@ -123,8 +123,8 @@ export async function setCustomInstructions(
 
 // Add these functions to get and set flavors
 export async function getFlavor() {
-  const dailyFlavors = await ensureFlavorsTableExists();
-  const result = await db.select().from(dailyFlavors).limit(1);
+  let dailyFlavors = await ensureFlavorsTableExists();
+  let result = await db.select().from(dailyFlavors).limit(1);
   return result[0]?.flavor || [];
 }
 
