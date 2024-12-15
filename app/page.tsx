@@ -110,7 +110,7 @@ export default function Page() {
           </Link>
           <Link
             href="/login"
-            className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200"
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200"
           >
             Log In
           </Link>
