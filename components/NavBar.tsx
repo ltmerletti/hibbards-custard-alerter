@@ -4,6 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useState, useEffect } from "react";
+import Image from "next/image";
+
+<style>@import url(https://fonts.googleapis.com/css2?family=Raleway%3Aital%2Cwght%400%2C100..900%3B1%2C100..900&amp;display=swap);</style>
+
 
 export default function NavBar() {
   const pathname = usePathname();
@@ -72,9 +76,16 @@ export default function NavBar() {
 
   return (
     <nav style={navStyle}>
-      <Link href="/" style={logoStyle}>
-        Hibbard&apos;s Custard
-      </Link>
+    <Link href="/" style={logoStyle}>
+      <Image
+        src="/static/Navbar-Thing.svg"
+        alt="logo"
+        width={340}
+        height={70}
+        style={{ maxHeight: '70px' }}
+        priority
+      />
+    </Link>
       <div style={navItemsStyle}>
         {navItems.map((item) => (
           <Link

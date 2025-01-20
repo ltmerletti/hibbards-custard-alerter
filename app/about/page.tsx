@@ -41,7 +41,7 @@ export default function AboutPage() {
                 </ul>
               </div>
               <p>
-                Developed by{" "}
+                I ({" "}
                 <a
                   href="https://github.com/SpecialistSteak"
                   target="_blank"
@@ -49,8 +49,8 @@ export default function AboutPage() {
                   className="text-indigo-600 dark:text-indigo-400 hover:underline"
                 >
                   SpecialistSteak
-                </a>
-                , this project combines my passion for coding with a love for
+                </a>)
+                developed this project out of my love for coding and
                 Hibbard&apos;s incredible frozen custard.
               </p>
               <p>

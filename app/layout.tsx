@@ -24,7 +24,8 @@ export default function RootLayout({
   return (
     <html lang="en">
     <Head>
-    <link rel="shortcut icon" href="/static/favicon.ico" />
+      <link rel="shortcut icon" href="/static/favicon.ico" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway%3Aital%2Cwght%400%2C100..900%3B1%2C100..900&amp;display=swap" />
 		</Head>
       <body className="bg-gradient-light from-custom-light-from to-custom-light-to dark:bg-gradient-dark dark:from-custom-dark-from dark:to-custom-dark-to min-h-screen">
         {children}
