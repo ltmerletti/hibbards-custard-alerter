@@ -45,7 +45,7 @@ export default function AboutPage() {
                 and helps you enjoy your favorite flavors more often!
               </p>
               <p>
-                If you like this project and would like to support what I do, you can find me on github at: <a
+                If you like this project and would like to support what I do, you can find me on GitHub at: <a
                   href="https://github.com/SpecialistSteak"
                   target="_blank"
                   rel="noopener noreferrer"
