@@ -131,7 +131,7 @@ export default function Page() {
             href="/about"
             className="text-gray-300 hover:text-white transition-all"
           >
-            About Us
+            About
           </Link>
           <Link
             href="/flavors"

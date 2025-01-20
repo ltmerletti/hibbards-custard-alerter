@@ -41,21 +41,18 @@ export default function AboutPage() {
                 </ul>
               </div>
               <p>
-                I ({" "}
-                <a
+                I hope that this tool enhances your Hibbard&apos;s experience
+                and helps you enjoy your favorite flavors more often!
+              </p>
+              <p>
+                If you like this project and would like to support what I do, you can find me on github at: <a
                   href="https://github.com/SpecialistSteak"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-indigo-600 dark:text-indigo-400 hover:underline"
                 >
                   SpecialistSteak
-                </a>)
-                developed this project out of my love for coding and
-                Hibbard&apos;s incredible frozen custard.
-              </p>
-              <p>
-                I hope that this tool enhances your Hibbard&apos;s experience
-                and helps you enjoy your favorite flavors more often!
+                </a>.
               </p>
             </div>
             <div className="mt-12 text-center">
