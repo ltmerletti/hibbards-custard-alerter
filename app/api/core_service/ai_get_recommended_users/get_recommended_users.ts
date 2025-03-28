@@ -12,7 +12,7 @@ async function processFlavorPreferences(
 ): Promise<Recommendation[]> {
   console.log("Processing flavor preferences with JSON data:", jsonData);
   const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-pro",
+    model: "gemini-2.5-pro-exp-03-25",
     generationConfig: { responseMimeType: "application/json" },
   });
 
