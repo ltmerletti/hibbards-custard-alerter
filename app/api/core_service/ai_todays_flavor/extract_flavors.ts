@@ -10,7 +10,7 @@ const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 export async function extractFlavors(jsonData: any): Promise<string[]> {
   const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-pro-exp-03-25",
+    model: process.env.GEMINI_MODEL ?? "",
     generationConfig: { responseMimeType: "application/json" },
   });
 
