@@ -4,22 +4,29 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/SpecialistSteak/hibbards-custard-alerter)
 ![Platform](https://img.shields.io/badge/platform-web-blue.svg)
 
-**Satisfy your sweet tooth with real-time updates on your favorite custard flavors!** Developed by the ingenious Luke Merletti, this webapp is your go-to source for all things deliciously Hibbard's. Check it out live and get your custard fix at [hibbards-custard-alerter.vercel.app](https://hibbards-custard-alerter.vercel.app/).
+**Satisfy your sweet tooth with real-time updates on your favorite custard flavors!** This webapp is your portal for all things Hibbard's. Check it out here [hibbards-custard-alerter.vercel.app](https://hibbards-custard-alerter.vercel.app/)!
 
 ## How it Works
 
-Tired of missing out on your favorite Hibbard's Custard flavors? Only want to be tempted when there's a flavor you're interested in? Our app keeps tabs on Hibbard's Instagram page, ensuring you're the first to know when a flavor you might be interested in is available.
+This app keeps track and alerts you through the following process:
 
 ![Flowchart](Hibbards_Custard_Notifier_Flowchart.png)
 
 ## What Data is Stored and Collected?
 
-Your privacy is with this app is a priority. I only collect your email address, and your password. Rest assured, your password remains encrypted, and no other data is collected from you.
+Your privacy is with this app is a priority. I only collect your email address, and your password. Your password is hashed and encrypted, so all data remains safe.
 
 ## How to Contribute?
 
-Got an idea to make this app even sweeter? Fork the repo, make your changes, and submit a pull request. I'll review it promptly, and if it's there are no issues, I'll merge it in!
+Do you have an idea to improve this app? Fork the repo, make your changes, and submit a pull request. I'll review it promptly, and if it's there are no issues, I'll merge it in!
 
 ## Contact
 
-Got questions or suggestions about the app? Don't hesitate to reach out at [hibbardscustardnotifier@gmail.com](mailto:hibbardscustardnotifier@gmail.com).
+Do you have questions or suggestions about the app? Don't hesitate to reach out at [hibbardscustardnotifier@gmail.com](mailto:hibbardscustardnotifier@gmail.com) or under the Issues tab.
+
+## Future Plans
+- [ ] Set up a Python (FastAPI) backend for scraping + ML
+- [ ] Create ML model to work on flavor suggestions using synthetic data set. This model will be used concurrently with the AI model for difficult rankings.
+- [ ] Switch away from Instagram API to web scraping
+- [ ] Remove layering of shading from UI for a cleaner look and add accented borders
+- [ ] Add a frequency setting to allow people to set their frequency multiplier (so that people who love ice cream would see more recommendations, even if they don't fit as well)
